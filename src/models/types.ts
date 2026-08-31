@@ -3,7 +3,7 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
-  role: "admin" | "superadmin";
+  role: "admin" | "superadmin" | "student";
   createdAt: Date;
   updatedAt: Date;
   comparePassword(password: string): Promise<boolean>;
@@ -55,12 +55,21 @@ export interface IGraduate extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+export interface IEventRsvp {
+  name: string;
+  email: string;
+  phone?: string;
+  attending: boolean;
+  guestCount?: number;
+  submittedAt: Date;
+}
 export interface IEvent extends Document {
   title: string;
   type: "birthday" | "activity" | "company-event";
-  date: string; // display date e.g. "Jun 15, 2026"
+  date: string;
   description: string;
   images?: string[];
+  rsvps?: IEventRsvp[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -167,6 +176,69 @@ export interface ICertificate extends Document {
   completionDate: Date;
   grade?: string;
   issuedBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface ITestimonial extends Document {
+  name: string;
+  role?: string;
+  content: string;
+  image?: string;
+  rating?: number;
+  section: "homepage" | "general";
+  status: "pending" | "approved" | "rejected";
+  isFeatured: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface IPartner extends Document {
+  name: string;
+  logo?: string;
+  website?: string;
+  description?: string;
+  category?: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface IClient extends Document {
+  name: string;
+  logo?: string;
+  website?: string;
+  industry?: string;
+  description?: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface IGadget extends Document {
+  name: string;
+  description: string;
+  price: number;
+  image?: string;
+  category?: string;
+  inStock: boolean;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface IAnnouncement extends Document {
+  title: string;
+  message: string;
+  isActive: boolean;
+  priority: "low" | "medium" | "high";
+  link?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface IJob extends Document {
+  title: string;
+  department?: string;
+  location?: string;
+  type: "full-time" | "part-time" | "contract" | "internship";
+  description: string;
+  requirements?: string[];
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../models/User";
+import { Student } from "../models/Student";
 import jwt from "jsonwebtoken";
 const generateToken = (id: string, role: string): string => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET || "nicegene_secret", {
@@ -114,6 +115,84 @@ export const updateProfile = async (req: any, res: Response): Promise<void> => {
   } catch (error) {
     res.status(500).json({
       message: "Error updating profile",
+      error: (error as Error).message,
+    });
+  }
+};
+
+export const studentRegister = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { fullName, email, password, phone, course } = req.body;
+    if (!fullName || !email || !password) {
+      res.status(400).json({ message: "Full name, email, and password are required" });
+      return;
+    }
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      res.status(400).json({ message: "A user with this email already exists" });
+      return;
+    }
+    const user = await User.create({
+      username: email.split("@")[0],
+      email,
+      password,
+      role: "student",
+    });
+    const student = await Student.create({
+      fullName,
+      email: email.toLowerCase(),
+      phone: phone || "",
+      course: course || "",
+      enrollmentDate: new Date(),
+      status: "active",
+      paymentStatus: "pending",
+      userId: user._id.toString(),
+    });
+    res.status(201).json({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      studentId: student._id,
+      token: generateToken(user._id.toString(), user.role),
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error registering student",
+      error: (error as Error).message,
+    });
+  }
+};
+
+export const studentLogin = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      res.status(400).json({ message: "Email and password are required" });
+      return;
+    }
+    const user = await User.findOne({ email, role: "student" });
+    if (!user) {
+      res.status(401).json({ message: "Invalid email or password" });
+      return;
+    }
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      res.status(401).json({ message: "Invalid email or password" });
+      return;
+    }
+    const student = await Student.findOne({ userId: user._id.toString() });
+    res.json({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      studentId: student?._id || null,
+      token: generateToken(user._id.toString(), user.role),
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error logging in student",
       error: (error as Error).message,
     });
   }

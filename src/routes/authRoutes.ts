@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login, getMe, updateProfile } from "../controllers/authController";
+import { register, login, getMe, updateProfile, studentRegister, studentLogin } from "../controllers/authController";
 import { protect } from "../middleware/authMiddleware";
 
 const router = Router();
@@ -153,4 +153,6 @@ router.get("/me", protect, getMe);
  *         description: Unauthorized
  */
 router.put("/update-profile", protect, updateProfile);
+router.post("/student/register", studentRegister);
+router.post("/student/login", studentLogin);
 export default router;

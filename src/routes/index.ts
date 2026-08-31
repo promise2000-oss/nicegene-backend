@@ -13,6 +13,12 @@ import paymentRoutes from "./paymentRoutes";
 import referralRoutes from "./referralRoutes";
 import examRoutes from "./examRoutes";
 import certificateRoutes from "./certificateRoutes";
+import testimonialRoutes from "./testimonialRoutes";
+import partnerRoutes from "./partnerRoutes";
+import clientRoutes from "./clientRoutes";
+import gadgetRoutes from "./gadgetRoutes";
+import announcementRoutes from "./announcementRoutes";
+import jobRoutes from "./jobRoutes";
 
 const router = Router();
 
@@ -33,5 +39,13 @@ router.use("/payments", paymentRoutes);
 router.use("/referrals", referralRoutes);
 router.use("/exams", examRoutes);
 router.use("/certificates", certificateRoutes);
+
+// Phase 2: High priority routes
+router.use("/testimonials", testimonialRoutes);
+router.use("/partners", partnerRoutes);
+router.use("/clients", clientRoutes);
+router.use("/gadgets", gadgetRoutes);
+router.use("/announcements", announcementRoutes);
+router.use("/jobs", jobRoutes);
 
 export default router;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getExams, getExamById, submitExam, createExam } from "../controllers/examController";
+import { getExams, getExamById, submitExam, createExam, getExamSubmissions, getStudentResults } from "../controllers/examController";
 import { protect } from "../middleware/authMiddleware";
 
 const router = Router();
@@ -141,5 +141,45 @@ router.get("/:id", protect, getExamById);
  *         description: Exam not found
  */
 router.post("/:id/submit", protect, submitExam);
+
+/**
+ * @swagger
+ * /exams/{id}/submissions:
+ *   get:
+ *     summary: Get all submissions for an exam (admin)
+ *     tags: [Exams]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of exam submissions
+ */
+router.get("/:id/submissions", protect, getExamSubmissions);
+
+/**
+ * @swagger
+ * /exams/results/{studentId}:
+ *   get:
+ *     summary: Get all exam results for a student
+ *     tags: [Exams]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: studentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: List of student exam results
+ */
+router.get("/results/:studentId", protect, getStudentResults);
 
 export default router;

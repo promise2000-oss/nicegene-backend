@@ -5,6 +5,7 @@ import {
   createEvent,
   updateEvent,
   deleteEvent,
+  rsvpToEvent,
 } from "../controllers/eventController";
 import { protect } from "../middleware/authMiddleware";
 import { upload } from "../middleware/uploadMiddleware";
@@ -123,5 +124,6 @@ router.post("/", protect, upload.array("images", 5), createEvent);
 router.get("/:id", getEventById);
 router.put("/:id", protect, upload.array("images", 5), updateEvent);
 router.delete("/:id", protect, deleteEvent);
+router.post("/:id/rsvp", rsvpToEvent);
 
 export default router;

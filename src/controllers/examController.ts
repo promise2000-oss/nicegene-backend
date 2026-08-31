@@ -108,3 +108,28 @@ export const createExam = async (req: AuthRequest, res: Response): Promise<void>
     });
   }
 };
+
+export const getExamSubmissions = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const submissions = await ExamSubmission.find({ examId: req.params.id }).sort({ submittedAt: -1 });
+    res.json(submissions);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching exam submissions",
+      error: (error as Error).message,
+    });
+  }
+};
+
+export const getStudentResults = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { studentId } = req.params;
+    const submissions = await ExamSubmission.find({ studentId }).sort({ submittedAt: -1 });
+    res.json(submissions);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching student results",
+      error: (error as Error).message,
+    });
+  }
+};
