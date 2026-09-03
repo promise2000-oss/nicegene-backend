@@ -4,6 +4,7 @@ import {
   getReferrals,
   getReferralById,
   updateReferralStatus,
+  deleteReferral,
 } from "../controllers/referralController";
 import { protect } from "../middleware/authMiddleware";
 
@@ -122,5 +123,27 @@ router.get("/:id", protect, getReferralById);
  *         description: Referral not found
  */
 router.put("/:id/status", protect, updateReferralStatus);
+
+/**
+ * @swagger
+ * /referrals/{id}:
+ *   delete:
+ *     summary: Delete a referral
+ *     tags: [Referrals]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Referral deleted
+ *       404:
+ *         description: Referral not found
+ */
+router.delete("/:id", protect, deleteReferral);
 
 export default router;

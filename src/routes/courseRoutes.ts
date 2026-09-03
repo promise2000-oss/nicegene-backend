@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getCoursePricing,
   upsertCoursePricing,
+  deleteCourse,
 } from "../controllers/courseController";
 import { protect } from "../middleware/authMiddleware";
 
@@ -64,5 +65,28 @@ router.get("/", getCoursePricing);
  *         description: Pricing override saved
  */
 router.put("/:title", protect, upsertCoursePricing);
+
+/**
+ * @swagger
+ * /courses/{title}:
+ *   delete:
+ *     summary: Delete a course pricing override
+ *     tags: [Course Pricing]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: title
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Exact course title (URL-encoded if needed)
+ *     responses:
+ *       200:
+ *         description: Course deleted
+ *       404:
+ *         description: Course not found
+ */
+router.delete("/:title", protect, deleteCourse);
 
 export default router;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getStudentById, updateStudent, getAllStudents } from "../controllers/studentController";
+import { getStudentById, updateStudent, getAllStudents, deleteStudent } from "../controllers/studentController";
 import { protect } from "../middleware/authMiddleware";
 
 const router = Router();
@@ -88,5 +88,27 @@ router.get("/:id", protect, getStudentById);
  *         description: Student not found
  */
 router.put("/:id", protect, updateStudent);
+
+/**
+ * @swagger
+ * /students/{id}:
+ *   delete:
+ *     summary: Delete a student
+ *     tags: [Students]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Student deleted
+ *       404:
+ *         description: Student not found
+ */
+router.delete("/:id", protect, deleteStudent);
 
 export default router;

@@ -3,6 +3,7 @@ import {
   createRegistration,
   getRegistrationById,
   getAllRegistrations,
+  deleteRegistration,
 } from "../controllers/registrationController";
 import { protect } from "../middleware/authMiddleware";
 
@@ -90,5 +91,27 @@ router.get("/", protect, getAllRegistrations);
  *         description: Registration not found
  */
 router.get("/:id", getRegistrationById);
+
+/**
+ * @swagger
+ * /registrations/{id}:
+ *   delete:
+ *     summary: Delete a registration
+ *     tags: [Registrations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Registration deleted
+ *       404:
+ *         description: Registration not found
+ */
+router.delete("/:id", protect, deleteRegistration);
 
 export default router;

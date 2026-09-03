@@ -46,6 +46,22 @@ export const getRegistrationById = async (req: AuthRequest, res: Response): Prom
   }
 };
 
+export const deleteRegistration = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const registration = await Registration.findByIdAndDelete(req.params.id);
+    if (!registration) {
+      res.status(404).json({ message: "Registration not found" });
+      return;
+    }
+    res.json({ message: "Registration deleted successfully" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error deleting registration",
+      error: (error as Error).message,
+    });
+  }
+};
+
 export const getAllRegistrations = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const registrations = await Registration.find().sort({ createdAt: -1 });

@@ -3,6 +3,7 @@ import {
   getCertificateById,
   getCertificatesByStudent,
   createCertificate,
+  deleteCertificate,
 } from "../controllers/certificateController";
 import { protect } from "../middleware/authMiddleware";
 
@@ -93,5 +94,28 @@ router.post("/", protect, createCertificate);
  *         description: Certificate not found
  */
 router.get("/:id", getCertificateById);
+
+/**
+ * @swagger
+ * /certificates/{id}:
+ *   delete:
+ *     summary: Delete a certificate
+ *     tags: [Certificates]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Certificate ID (e.g., NG-ABC123-XYZ)
+ *     responses:
+ *       200:
+ *         description: Certificate deleted
+ *       404:
+ *         description: Certificate not found
+ */
+router.delete("/:id", protect, deleteCertificate);
 
 export default router;

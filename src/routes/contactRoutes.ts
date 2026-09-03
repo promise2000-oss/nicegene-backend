@@ -3,6 +3,7 @@ import {
   submitContactForm,
   getContactSubmissions,
   markAsRead,
+  deleteContact,
 } from "../controllers/contactController";
 import { protect } from "../middleware/authMiddleware";
 
@@ -84,5 +85,27 @@ router.get('/', protect, getContactSubmissions); // Admin only view
  *         description: Unauthorized
  */
 router.patch('/:id/read', protect, markAsRead); // Admin only mark as read
+
+/**
+ * @swagger
+ * /contact/{id}:
+ *   delete:
+ *     summary: Delete a contact submission (Admin only)
+ *     tags: [Contact]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Submission deleted
+ *       404:
+ *         description: Submission not found
+ */
+router.delete('/:id', protect, deleteContact);
 
 export default router;

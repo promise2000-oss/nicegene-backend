@@ -43,6 +43,22 @@ export const updateStudent = async (req: AuthRequest, res: Response): Promise<vo
   }
 };
 
+export const deleteStudent = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const student = await Student.findByIdAndDelete(req.params.id);
+    if (!student) {
+      res.status(404).json({ message: "Student not found" });
+      return;
+    }
+    res.json({ message: "Student deleted successfully" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error deleting student",
+      error: (error as Error).message,
+    });
+  }
+};
+
 export const getAllStudents = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const students = await Student.find().sort({ createdAt: -1 });

@@ -82,6 +82,23 @@ export const submitExam = async (req: AuthRequest, res: Response): Promise<void>
   }
 };
 
+export const deleteExam = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const exam = await Exam.findByIdAndDelete(req.params.id);
+    if (!exam) {
+      res.status(404).json({ message: "Exam not found" });
+      return;
+    }
+    await ExamSubmission.deleteMany({ examId: req.params.id });
+    res.json({ message: "Exam and its submissions deleted successfully" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error deleting exam",
+      error: (error as Error).message,
+    });
+  }
+};
+
 export const createExam = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { title, course, questions, duration, totalPoints, passingScore } = req.body;

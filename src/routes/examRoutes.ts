@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getExams, getExamById, submitExam, createExam, getExamSubmissions, getStudentResults } from "../controllers/examController";
+import { getExams, getExamById, submitExam, createExam, getExamSubmissions, getStudentResults, deleteExam } from "../controllers/examController";
 import { protect } from "../middleware/authMiddleware";
 
 const router = Router();
@@ -99,6 +99,28 @@ router.post("/", protect, createExam);
  *         description: Exam not found
  */
 router.get("/:id", protect, getExamById);
+
+/**
+ * @swagger
+ * /exams/{id}:
+ *   delete:
+ *     summary: Delete an exam and its submissions
+ *     tags: [Exams]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Exam deleted
+ *       404:
+ *         description: Exam not found
+ */
+router.delete("/:id", protect, deleteExam);
 
 /**
  * @swagger

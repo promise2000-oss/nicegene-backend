@@ -43,6 +43,19 @@ export const getContactSubmissions = async (req: Request, res: Response): Promis
   }
 };
 
+export const deleteContact = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const contact = await Contact.findByIdAndDelete(req.params.id);
+    if (!contact) {
+      res.status(404).json({ message: "Submission not found" });
+      return;
+    }
+    res.json({ message: "Contact submission deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting contact submission", error: (error as Error).message });
+  }
+};
+
 export const markAsRead = async (req: Request, res: Response): Promise<void> => {
   try {
     const contact = await Contact.findById(req.params.id);

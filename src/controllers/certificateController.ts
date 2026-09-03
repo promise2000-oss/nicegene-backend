@@ -39,6 +39,22 @@ export const getCertificatesByStudent = async (req: AuthRequest, res: Response):
   }
 };
 
+export const deleteCertificate = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const certificate = await Certificate.findOneAndDelete({ certificateId: req.params.id });
+    if (!certificate) {
+      res.status(404).json({ message: "Certificate not found" });
+      return;
+    }
+    res.json({ message: "Certificate deleted successfully" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error deleting certificate",
+      error: (error as Error).message,
+    });
+  }
+};
+
 export const createCertificate = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { studentName, studentEmail, course, grade, issuedBy } = req.body;

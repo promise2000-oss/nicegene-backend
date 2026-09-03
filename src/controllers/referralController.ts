@@ -62,6 +62,22 @@ export const getReferralById = async (req: AuthRequest, res: Response): Promise<
   }
 };
 
+export const deleteReferral = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const referral = await Referral.findByIdAndDelete(req.params.id);
+    if (!referral) {
+      res.status(404).json({ message: "Referral not found" });
+      return;
+    }
+    res.json({ message: "Referral deleted successfully" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error deleting referral",
+      error: (error as Error).message,
+    });
+  }
+};
+
 export const updateReferralStatus = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { status, commission } = req.body;
